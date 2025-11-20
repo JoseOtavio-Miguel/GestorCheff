@@ -97,7 +97,7 @@ Basta importá-lo no **phpMyAdmin** para criar automaticamente todas as tabelas 
 
 **José Otávio dos Santos Miguel**  
 📧 Email: *joseotavio_m@hotmail.com*  
-💼 [LinkedIn]([[https://linkedin.com/in/seu-perfil](https://www.linkedin.com/in/josé-otávio-dos-santos-miguel-31a952322)]) | 🐙 [GitHub](https://github.com/JoseOtavio-Miguel)
+💼 [LinkedIn](josé-otávio-dos-santos-miguel-31a952322) | 🐙 [GitHub](https://github.com/JoseOtavio-Miguel)
 
 ---
 
