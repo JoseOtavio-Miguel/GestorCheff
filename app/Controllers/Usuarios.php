@@ -112,7 +112,7 @@ class Usuarios extends BaseController
             'sobrenome' => 'required|min_length[3]|max_length[50]',
             'email' => 'required|valid_email|is_unique[usuarios.email]',
             'telefone' => 'permit_empty|max_length[20]',
-            'cpf' => 'required|validaCPF|is_unique[usuarios.cpf]',
+            'cpf' => 'required|is_unique[usuarios.cpf]',
             'datanascimento' => 'required|valid_date',
             'senha' => 'required|min_length[8]',
             'confirmasenha' => 'required|matches[senha]'

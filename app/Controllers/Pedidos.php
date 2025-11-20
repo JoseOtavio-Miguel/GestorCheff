@@ -160,7 +160,7 @@ public function salvar()
             return redirect()->back()->with('error', 'Acesso não autorizado');
         }
 
-        // Query SQL nativa
+        // Busca os itens do pedido
         $query = "
             SELECT itens_pedido.*, itens_cardapio.nome AS item_nome
             FROM itens_pedido
@@ -169,71 +169,73 @@ public function salvar()
         ";
         $itens = $db->query($query, [$pedidoId])->getResultArray();
 
+        // Busca o log de status
+        $logs = $db->table('pedido_status_log')
+                ->where('pedido_id', $pedidoId)
+                ->orderBy('horario', 'ASC')
+                ->get()
+                ->getResultArray();
+
         return view('usuarios/detalhes-pedido', [
             'pedido' => $pedido,
-            'itens'  => $itens
+            'itens'  => $itens,
+            'logs'   => $logs  // <-- passa os logs para a view
         ]);
     }
 
 
 
-    public function cancelar()
+
+    // Cancelar Pedido
+    public function cancelar($id)
     {
-        if (!$this->request->isAJAX()) {
-            return $this->response->setStatusCode(405)->setJSON([
-                'success' => false,
-                'message' => 'Método não permitido'
-            ]);
-        }
-
-        $pedidoId = $this->request->getPost('pedido_id');
-        if (!$pedidoId) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'ID do pedido não informado'
-            ]);
-        }
-
         $pedidoModel = new PedidosModel();
-        $pedido = $pedidoModel->find($pedidoId);
-        
-        if (!$pedido) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Pedido não encontrado'
-            ]);
-        }
 
-        // Verifica se o pedido pertence ao usuário logado
-        if ($pedido['usuario_id'] != session()->get('usuario_id')) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Acesso não autorizado'
-            ]);
-        }
+        $pedidoModel->update($id, ['status' => 'cancelado']);
 
-        // Verifica se o pedido pode ser cancelado
-        if (!in_array($pedido['status'], ['aguardando', 'preparando'])) {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Este pedido não pode mais ser cancelado'
-            ]);
-        }
-
-        // Atualiza o status
-        if ($pedidoModel->update($pedidoId, ['status' => 'cancelado'])) {
-            return $this->response->setJSON([
-                'success' => true,
-                'message' => 'Pedido cancelado com sucesso'
-            ]);
-        } else {
-            return $this->response->setJSON([
-                'success' => false,
-                'message' => 'Erro ao cancelar pedido'
-            ]);
-        }
+        return redirect()->back()->with('msg', 'Pedido cancelado!');
     }
 
+    // Confirmar Pedido
+    public function confirmar($id)
+    {
+        $pedidoModel = new PedidosModel();
+
+        $pedidoModel->update($id, ['status' => 'preparando']);
+
+        return redirect()->back()->with('msg', 'Pedido confirmado!');
+    }
+
+    // Enviar Pedido
+    public function enviar($id)
+    {
+        $pedidoModel = new PedidosModel();
+
+        $pedidoModel->update($id, ['status' => 'enviado']);
+
+        return redirect()->back()->with('msg', 'Pedido enviado!');
+    }
+
+    public function confirmarEntrega($id)
+    {
+        $pedidoModel = new \App\Models\PedidosModel();
+
+        // Busca o pedido
+        $pedido = $pedidoModel->find($id);
+        if (!$pedido) {
+            return redirect()->back()->with('error', 'Pedido não encontrado');
+        }
+
+        // Verifica se o pedido está no status correto
+        if ($pedido['status'] !== 'enviado') {
+            return redirect()->back()->with('error', 'Este pedido ainda não pode ser finalizado.');
+        }
+
+        // Atualiza o status para FINALIZADO
+        $pedidoModel->update($id, ['status' => 'finalizado']);
+
+        return redirect()->back()->with('success', 'Entrega confirmada! Pedido finalizado.');
+    }
 }
 
 ?>

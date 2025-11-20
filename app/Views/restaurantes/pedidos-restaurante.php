@@ -130,6 +130,7 @@
                                     <a href="<?= base_url('pedidos/detalhes/' . $pedido['id']) ?>" class="btn btn-sm btn-outline-secondary rounded-3 px-3">
                                         <i class="fas fa-eye me-1"></i> Detalhes
                                     </a>
+                                
                                     <?php if ($pedido['status'] == 'aguardando'): ?>
                                         <form method="post" action="<?= base_url('pedidos/confirmar/' . $pedido['id']) ?>" class="d-inline">
                                             <?= csrf_field() ?>
@@ -143,6 +144,15 @@
                                             <?= csrf_field() ?>
                                             <button type="submit" class="btn btn-sm btn-outline-danger rounded-3 px-3" onclick="return confirm('Tem certeza que deseja cancelar este pedido?');">
                                                 <i class="fas fa-times me-1"></i> Cancelar
+                                            </button>
+                                        </form>
+                                    <?php endif; ?>
+
+                                    <?php if ($pedido['status'] == 'preparando' || $pedido['status'] == 'enviado'): ?>
+                                        <form method="post" action="<?= base_url('pedidos/confirmarEntrega/' . $pedido['id']) ?>" class="d-inline">
+                                            <?= csrf_field() ?>
+                                            <button type="submit" class="btn btn-sm btn-outline-success rounded-3 px-3">
+                                                <i class="fas fa-check me-1"></i> Confirmar Entrega
                                             </button>
                                         </form>
                                     <?php endif; ?>

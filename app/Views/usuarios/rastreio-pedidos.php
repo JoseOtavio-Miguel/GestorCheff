@@ -36,10 +36,21 @@
                                 <a href="<?= base_url('pedidos/detalhes/' . $pedido['id']) ?>" class="btn btn-sm btn-outline-primary me-2">
                                     <i class="bi bi-eye"></i> Detalhes
                                 </a>
+                                
+
                                 <?php if ($pedido['status'] == 'aguardando' || $pedido['status'] == 'preparando'): ?>
-                                    <button class="btn btn-sm btn-outline-danger cancelar-pedido" data-pedido-id="<?= $pedido['id'] ?>">
+                                    <a href="<?= base_url('pedidos/cancelar/' . $pedido['id']) ?>"
+                                    class="btn btn-sm btn-outline-danger cancelar-pedido"
+                                    onclick="return confirm('Tem certeza que deseja cancelar este pedido?');">
                                         <i class="bi bi-x-circle"></i> Cancelar
-                                    </button>
+                                    </a>
+                                <?php endif; ?>
+
+                                <?php if ($pedido['status'] == 'preparando'): ?>
+                                    <a href="<?= base_url('pedidos/enviar/' . $pedido['id']) ?>"
+                                    class="btn btn-sm btn-outline-success enviar-pedido">
+                                        <i class="bi bi-send-fill"></i> Enviar
+                                    </a>
                                 <?php endif; ?>
                             </td>
                         </tr>

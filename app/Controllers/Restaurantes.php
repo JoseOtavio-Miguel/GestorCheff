@@ -54,6 +54,12 @@ class Restaurantes extends Controller
 
     }
 
+    public function logout()
+    {
+        return view('/home');
+
+    }
+
     public function painel($restauranteId)
     {
         return view('restaurantes/painel-restaurante', [  // <-- CERTO
@@ -133,4 +139,25 @@ class Restaurantes extends Controller
 
         return redirect()->to(base_url('restaurantes'))->with('success', 'Dados do restaurante atualizados com sucesso!');
     }
+
+    
+    public function pedidos($restauranteId)
+    {
+        // Carrega o model de pedidos
+        $pedidosModel = new \App\Models\PedidosModel();
+
+        // Busca todos os pedidos do restaurante
+        $pedidos = $pedidosModel
+            ->where('restaurante_id', $restauranteId)
+            ->orderBy('id', 'DESC')
+            ->findAll();
+
+        // Envia dados para a view
+        return view('restaurantes/pedidos-restaurante', [
+            'restauranteId' => $restauranteId,
+            'restauranteNome' => session()->get('restaurante_nome'),
+            'pedidos' => $pedidos
+        ]);
+    }
+
 }

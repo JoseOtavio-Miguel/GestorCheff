@@ -274,46 +274,62 @@
                 </div>
                 
                 <div class="col-lg-4">
-                    <div class="info-box">
+                   <div class="info-box">
                         <h5><i class="fas fa-history me-2"></i>Status do Pedido</h5>
+
                         <div class="status-timeline">
-                            <div class="status-step <?= $pedido['status'] == 'aguardando' ? 'active' : ($pedido['status'] == 'cancelado' ? 'canceled' : 'completed') ?>">
+                            <!-- 1. Pedido Recebido -->
+                            <div class="status-step
+                                <?= $pedido['status'] == 'aguardando' ? 'active' : ($pedido['status'] != 'cancelado' ? 'completed' : '') ?>
+                            ">
                                 <p class="mb-1">Pedido Recebido</p>
                                 <small class="text-muted"><?= date('d/m H:i', strtotime($pedido['criado_em'])) ?></small>
                             </div>
-                            
-                            <div class="status-step <?= $pedido['status'] == 'preparando' ? 'active' : (in_array($pedido['status'], ['enviado', 'entregue']) ? 'completed' : '') ?>">
+
+                            <!-- 2. Em Preparação -->
+                            <div class="status-step
+                                <?= $pedido['status'] == 'preparando' ? 'active' : '' ?>
+                                <?= in_array($pedido['status'], ['enviado','finalizado']) ? 'completed' : '' ?>
+                            ">
                                 <p class="mb-1">Em Preparação</p>
-                                <?php if(isset($pedido['inicio_preparo'])): ?>
-                                <small class="text-muted"><?= date('d/m H:i', strtotime($pedido['inicio_preparo'])) ?></small>
-                                <?php endif; ?>
+                                <small class="text-muted">
+                                    <?= isset($pedido['preparando_em']) ? date('d/m H:i', strtotime($pedido['preparando_em'])) : '-' ?>
+                                </small>
                             </div>
-                            
-                            <div class="status-step <?= $pedido['status'] == 'enviado' ? 'active' : ($pedido['status'] == 'entregue' ? 'completed' : '') ?>">
+
+                            <!-- 3. Enviado para Entrega -->
+                            <div class="status-step
+                                <?= $pedido['status'] == 'enviado' ? 'active' : '' ?>
+                                <?= $pedido['status'] == 'finalizado' ? 'completed' : '' ?>
+                            ">
                                 <p class="mb-1">Enviado para Entrega</p>
-                                <?php if(isset($pedido['envio_entrega'])): ?>
-                                <small class="text-muted"><?= date('d/m H:i', strtotime($pedido['envio_entrega'])) ?></small>
-                                <?php endif; ?>
+                                <small class="text-muted">
+                                    <?= isset($pedido['enviado_em']) ? date('d/m H:i', strtotime($pedido['enviado_em'])) : '-' ?>
+                                </small>
                             </div>
-                            
-                            <div class="status-step <?= $pedido['status'] == 'entregue' ? 'completed' : '' ?>">
-                                <p class="mb-1">Pedido Entregue</p>
-                                <?php if(isset($pedido['data_entrega'])): ?>
-                                <small class="text-muted"><?= date('d/m H:i', strtotime($pedido['data_entrega'])) ?></small>
-                                <?php endif; ?>
+
+                            <!-- 4. Pedido Finalizado -->
+                            <div class="status-step
+                                <?= $pedido['status'] == 'finalizado' ? 'active completed' : '' ?>
+                            ">
+                                <p class="mb-1">Pedido Finalizado</p>
+                                <small class="text-muted">
+                                    <?= isset($pedido['finalizado_em']) ? date('d/m H:i', strtotime($pedido['finalizado_em'])) : '-' ?>
+                                </small>
                             </div>
-                            
-                            <?php if($pedido['status'] == 'cancelado'): ?>
-                            <div class="status-step canceled">
-                                <p class="mb-1">Pedido Cancelado</p>
-                                <?php if(isset($pedido['data_cancelamento'])): ?>
-                                <small class="text-muted"><?= date('d/m H:i', strtotime($pedido['data_cancelamento'])) ?></small>
-                                <?php endif; ?>
-                            </div>
+
+                            <!-- 5. Cancelado -->
+                            <?php if ($pedido['status'] == 'cancelado'): ?>
+                                <div class="status-step canceled active">
+                                    <p class="mb-1">Pedido Cancelado</p>
+                                    <small class="text-muted">
+                                        <?= isset($pedido['cancelado_em']) ? date('d/m H:i', strtotime($pedido['cancelado_em'])) : '-' ?>
+                                    </small>
+                                </div>
                             <?php endif; ?>
                         </div>
+
                     </div>
-                    
                     <div class="info-box">
                         <h5><i class="fas fa-file-invoice-dollar me-2"></i>Resumo Financeiro</h5>
                         <div class="d-flex justify-content-between mb-2">

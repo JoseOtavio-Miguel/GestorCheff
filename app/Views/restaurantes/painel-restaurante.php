@@ -31,8 +31,6 @@
                     <h4 class="fw-bold">Cardápio</h4>
                     <p class="text-muted">Gerencie seus pratos e bebidas.</p>
                     <a href="<?= base_url('cardapio/' . $restauranteId) ?>" class="btn-custom btn btn-danger w-75 mt-3">Ver Cardápio</a>
-
-
                 </div>
             </div>
         </div>
@@ -45,7 +43,7 @@
                     </div>
                     <h4 class="fw-bold">Pedidos</h4>
                     <p class="text-muted">Acompanhe os pedidos recebidos.</p>
-                    <a href="<?= base_url('pedidos/' . $restauranteId) ?>" class="btn-custom btn btn-danger w-75 mt-3">Ver Pedidos</a>
+                    <a href="<?= base_url('/restaurante/pedidos/' . $restauranteId) ?>" class="btn-custom btn btn-danger w-75 mt-3">Ver Pedidos</a>
                 </div>
             </div>
         </div>
@@ -88,7 +86,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
