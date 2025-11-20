@@ -96,8 +96,8 @@ Basta importá-lo no **phpMyAdmin** para criar automaticamente todas as tabelas 
 ## 👨‍💻 Autor
 
 **José Otávio dos Santos Miguel**  
-📧 Email: *seuemail@exemplo.com*  
-💼 [LinkedIn](https://linkedin.com/in/seu-perfil) | 🐙 [GitHub](https://github.com/seu-usuario)
+📧 Email: *joseotavio_m@hotmail.com*  
+💼 [LinkedIn]([https://linkedin.com/in/seu-perfil](https://www.linkedin.com/in/josé-otávio-dos-santos-miguel-31a952322)) | 🐙 [GitHub](https://github.com/JoseOtavio-Miguel)
 
 ---
 
